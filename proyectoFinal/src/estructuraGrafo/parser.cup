@@ -1,0 +1,33 @@
+package estructuraGrafo;
+import java_cup.runtime.Symbol;
+
+parser code {:
+
+    ArrayList<ruta> listadoDeRutas;
+    public void syntax_error(Symbol s){
+        System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+    }
+    public void unrecovered_syntax_error(Symbol s) throwsjava.lang.Exception{
+    System.out.println("La Cadena:" +s.value+" en la Linea:"+(s.right+1) +" ,Columna: "+s.left+"esta fuera de contexto." );
+    }
+:}
+
+terminal menor,mayor,id,or;
+non-terminal INICIO, DATO;
+
+    start with INICIO;
+
+INICIO::=menor id:e1 mayor or menor id:e2 mayor or
+menor id:e3 mayor or menor id:e4 mayor or menor id:e5 mayor INICIO
+{:
+String O=(String)e1;
+String D=(String)e2;
+Double timeV=Double.parseDouble((String)e3);
+Double timeP=Double.parseDouble((String)e3);
+Double gas=Double.parseDouble((String)e4);
+Double desgaste=Double.parseDouble((String)e5);
+listadoDeRutas.add(new ruta(O,D,timeV,timeP,gas,desgaste));
+:}
+| ;
+
+
