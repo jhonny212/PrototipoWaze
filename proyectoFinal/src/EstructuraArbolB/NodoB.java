@@ -197,7 +197,8 @@ public class NodoB {
             double clave2 = tmp.getDato().getClave();
             if (clave1 == clave2) {
                 //posicion del nodo,posicion del padre, ref donde se encuentra el dato
-                aux.eliminar(i, posPadre, aux, i);
+                System.out.println("Eliminado en posicion"+i+" "+posPadre);
+                //aux.eliminar(i, posPadre, aux, i);
                 break;
             }
             if (clave1 < clave2) {

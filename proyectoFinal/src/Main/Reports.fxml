@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main.ReportsController">
+   <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Reportes">
+            <items>
+              <MenuItem fx:id="m1" mnemonicParsing="false" onAction="#vehiculo" text="Mejor vehiculo/peor" />
+                  <MenuItem fx:id="m2" mnemonicParsing="false" onAction="#gas" text="Mejor viaje con gas/peor" />
+                  <MenuItem fx:id="m3" mnemonicParsing="false" onAction="#aPie" text="Mejor a pie/peor" />
+                  <MenuItem fx:id="m4" mnemonicParsing="false" onAction="#desgaste" text="Mejor viaje con poco desgaste/peor" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Label fx:id="title" alignment="CENTER" prefHeight="76.0" prefWidth="815.0" text="Label" textAlignment="CENTER" />
+      <HBox prefHeight="510.0" prefWidth="815.0">
+         <children>
+            <VBox prefHeight="428.0" prefWidth="397.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="88.0" prefWidth="399.0" text="Mejor" />
+                  <ImageView fx:id="img1" fitHeight="422.0" fitWidth="399.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </VBox>
+            <VBox layoutX="10.0" layoutY="10.0" prefHeight="409.0" prefWidth="398.0" />
+            <VBox layoutX="10.0" layoutY="10.0" prefHeight="409.0" prefWidth="398.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="88.0" prefWidth="399.0" text="Peor" />
+                  <ImageView fx:id="img2" fitHeight="422.0" fitWidth="399.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</VBox>

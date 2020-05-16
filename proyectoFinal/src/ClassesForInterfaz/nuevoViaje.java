@@ -32,7 +32,16 @@ public class nuevoViaje {
 
     boolean isSelected;
     String digram;
+    String origen,destino;
+    ObservableList<String> listado;
+    public String getOrigen() {
+        return origen;
+    }
 
+    public String getDestino() {
+        return destino;
+    }
+    
     public boolean isIsSelected() {
         return isSelected;
     }
@@ -64,6 +73,7 @@ public class nuevoViaje {
 
         Nodos.setOnAction(e -> {
             x = Nodos.getSelectionModel().getSelectedIndex();
+            origen=Nodos.getSelectionModel().getSelectedItem().toString();
             String array[] = nodos.get(x).buscarRutas();
             this.digram = nodos.get(x).getDiagrama();
             try {
@@ -75,6 +85,7 @@ public class nuevoViaje {
         });
         Fin.setOnAction((t) -> {
             y = Fin.getSelectionModel().getSelectedIndex();
+            destino=Fin.getSelectionModel().getSelectedItem().toString();
         });
         Dialog dialog = new Dialog();
         dialog.setTitle("Login Dialog");
@@ -109,9 +120,6 @@ public class nuevoViaje {
         dialog.getDialogPane().setContent(grid);
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.get().equals(loginButtonType)) {
-            //int tmp = nodos.get(x).obtener(Fin.getSelectionModel().getSelectedItem().toString());
-            //nodos.get(x).getNodos().get(tmp).generar("red");
-            //nodos.get(x).generar();
             String name=Fin.getSelectionModel().getSelectedItem().toString();
             for (int i = 0; i < nodos.size(); i++) {
                if(name.equals(nodos.get(i).getName())){

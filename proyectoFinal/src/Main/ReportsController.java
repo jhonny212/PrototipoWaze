@@ -6,8 +6,8 @@
 package Main;
 
 import ClassesForInterfaz.tabla;
-import estructuraGrafo.NodoGrafo;
 import estructuraGrafo.TablaTransiciones;
+import estructuraGrafo.NodoGrafo;
 import static estructuraGrafo.TablaTransiciones.getMejorDesgaste;
 import static estructuraGrafo.TablaTransiciones.getMejorGas;
 import static estructuraGrafo.TablaTransiciones.getMejorPie;
@@ -15,80 +15,72 @@ import static estructuraGrafo.TablaTransiciones.getMejorVehiculo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.ArrayList;
-
-import javafx.geometry.Pos;
+import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-
-import javafx.scene.layout.VBox;
 
 /**
+ * FXML Controller class
  *
  * @author jhonny
  */
-public class reportes {
+public class ReportsController implements Initializable {
 
-    private VBox panel;
-    private final int x, y;
-    Label title;
-    Label cam;
-    
+    private int x, y;
     int longitud;
     NodoGrafo fin, origen;
-    ImageView im;
-    int contador;
-    HBox box;
     ArrayList<NodoGrafo> list;
+    /**
+     * Initializes the controller class.
+     *
+     * @param url
+     * @param rb
+     */
+    @FXML
+    MenuItem m1, m2, m3, m4;
+    @FXML
+    Label title;
+    @FXML
+    ImageView img1, img2;
 
-    public reportes(int x, int y, int longitud, ArrayList<NodoGrafo> list) {
-        this.panel = new VBox(30);
-        box = new HBox();
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    }
+
+    @FXML
+    private void vehiculo(ActionEvent event) {
+        mejor(1);
+    }
+
+    @FXML
+    private void desgaste(ActionEvent event) {
+        mejor(2);
+    }
+
+    @FXML
+    private void gas(ActionEvent event) {
+        mejor(4);
+    }
+
+    @FXML
+    private void aPie(ActionEvent event) {
+        mejor(3);
+    }
+
+    public void inicializar(int x, int y, int longitud, ArrayList<NodoGrafo> list) {
         this.x = x;
         this.y = y;
         this.fin = list.get(y);
         this.origen = list.get(x);
-        generar();
-        im = new ImageView();
-        title = new Label();
-        contador = 0;
         this.list = list;
-        cam=new Label();
-    }
-
-    public VBox getPanel() {
-        return panel;
-    }
-
-    private void generar() {
-        Menu m = new Menu("Opciones");
-        MenuItem m1 = new MenuItem("Mejor/peor Viaje vehiculo");
-        MenuItem m2 = new MenuItem("Mejor/peor Viaje pie");
-        MenuItem m3 = new MenuItem("Mejor/peor Viaje con gasolina");
-        MenuItem m4 = new MenuItem("Mejor/peor Viaje con desgaste");
-
-        m.getItems().addAll(m1, m2, m3, m4);
-        MenuBar mb = new MenuBar();
-        mb.getMenus().add(m);
-        panel.getChildren().add(mb);
-        m1.setOnAction((t) -> {
-            mejor(1);
-        });
-        m2.setOnAction((t) -> {
-            mejor(3);
-        });
-        m3.setOnAction((t) -> {
-            mejor(4);
-        });
-        m4.setOnAction((t) -> {
-            mejor(2);
-        });
-        
 
     }
 
@@ -112,36 +104,35 @@ public class reportes {
                 mejor = getMejorGas();
                 break;
         }
-
+       
         final int columna = this.y;
         int fila = this.x;
         tabla tmp = mejor[fila][columna];
         String recorrido = "digraph G {\n";
         int count = 0;
-        int totalDeCamino=0;
+        int totalDeCamino = 0;
         recorrido += "node" + fila + "[fillcolor=yellow, style=\"rounded,filled\", shape=circle, label=" + origen.getName() + "] \n";
         while (true) {
             count++;
             String letter = tmp.getVertice();
-            int aux=fila;
-             fila=obtener(letter);
+            int aux = fila;
+            fila = obtener(letter);
             recorrido += "node" + fila + "[fillcolor=yellow, style=\"rounded,filled\", shape=circle, label=" + letter + "]\n ";
             if (count == 1) {
-               
-               totalDeCamino+=tmp.getDato();
-               recorrido += "node" + aux + "-> node" + fila + " [label=\"" + tmp.getDato() + "\"]\n";
+
+                totalDeCamino += tmp.getDato();
+                recorrido += "node" + aux + "-> node" + fila + " [label=\"" + tmp.getDato() + "\"]\n";
             }
-             
-            
+
             if (letter.equals(fin.getName())) {
                 break;
             } else {
                 tmp = mejor[fila][columna];
-                aux=fila;
-                fila=obtener(tmp.getVertice());
-                totalDeCamino+=tmp.getDato();
+                aux = fila;
+                fila = obtener(tmp.getVertice());
+                totalDeCamino += tmp.getDato();
                 recorrido += "node" + aux + "-> node" + fila + " [label=\"" + tmp.getDato() + "\"]\n";
-                
+
             }
         }
         recorrido += "}";
@@ -149,7 +140,7 @@ public class reportes {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
         }
-        this.cam.setText("Se tiene un recorrido de->"+String.valueOf(totalDeCamino));
+        //this.cam.setText("Se tiene un recorrido de->"+String.valueOf(totalDeCamino));
         TablaTransiciones tb = new TablaTransiciones();
         tb.generarGrafica(recorrido, "mejor", "mejor");
         File f = new File("mejor.png");
@@ -160,17 +151,7 @@ public class reportes {
             e.printStackTrace();
         }
 
-        this.im.setImage(source);
-        
-        if (contador == 0) {
-            box.getChildren().add(im);
-            box.setAlignment(Pos.CENTER);
-            title.setAlignment(Pos.CENTER_RIGHT);
-            cam.setAlignment(Pos.CENTER_RIGHT);
-            this.panel.getChildren().addAll(box, title,cam);
-        }
-        contador++;
-
+        this.img1.setImage(source);
     }
 
     public int obtener(String name) {
@@ -181,5 +162,4 @@ public class reportes {
         }
         return 0;
     }
-
 }
