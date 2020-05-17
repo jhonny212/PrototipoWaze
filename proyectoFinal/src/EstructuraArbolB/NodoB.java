@@ -68,28 +68,28 @@ public class NodoB {
     private void add(ruta rta) {
         this.size++;
         this.datos[size - 1] = new Nodo(rta, size);
-        ordenarDatos(true);
+        ordenarDatos(true, this);
     }
 
-    private void ordenarDatos(boolean v) {
+    private void ordenarDatos(boolean v, NodoB href) {
         for (int i = 0; i < size; i++) {
-            Nodo tmp = this.datos[i];
+            Nodo tmp = href.datos[i];
             for (int j = i + 1; j < size; j++) {
                 try {
-                    Nodo t2 = this.datos[j];
+                    Nodo t2 = href.datos[j];
                     if (tmp.getDato().getClave() > t2.getDato().getClave()) {
                         if (v) {
-                            NodoB aux = this.datos[i].hijoDer;
-                            NodoB aux2 = this.datos[i].hijoIzq;
-                            this.datos[i].hijoDer = this.datos[j].hijoDer;
-                            this.datos[i].hijoIzq = this.datos[j].hijoIzq;
-                            this.datos[j].hijoDer = aux;
-                            this.datos[j].hijoIzq = aux2;
+                            NodoB aux = href.datos[i].hijoDer;
+                            NodoB aux2 = href.datos[i].hijoIzq;
+                            href.datos[i].hijoDer = href.datos[j].hijoDer;
+                            href.datos[i].hijoIzq = href.datos[j].hijoIzq;
+                            href.datos[j].hijoDer = aux;
+                            href.datos[j].hijoIzq = aux2;
                         }
                         {
                             ruta t = tmp.getDato();
-                            this.datos[i].setDato(t2.getDato());
-                            this.datos[j].setDato(t);
+                            href.datos[i].setDato(t2.getDato());
+                            href.datos[j].setDato(t);
                         }
 
                     }
@@ -196,9 +196,7 @@ public class NodoB {
             Nodo tmp = aux.datos[i];
             double clave2 = tmp.getDato().getClave();
             if (clave1 == clave2) {
-                //posicion del nodo,posicion del padre, ref donde se encuentra el dato
-                System.out.println("Eliminado en posicion"+i+" "+posPadre);
-                //aux.eliminar(i, posPadre, aux, i);
+                eliminar(i, posPadre, aux, i, aux.padre);
                 break;
             }
             if (clave1 < clave2) {
@@ -206,7 +204,7 @@ public class NodoB {
                     aux.datos[i].hijoIzq.eliminar(aux.datos[i].hijoIzq, clave1, i);
                     if (aux.size < 2) {
                         if (aux.padre != null) {
-                            aux.unir2(i, posPadre, aux);
+                            unir2(i, posPadre, aux, aux.padre);
                         }
                     }
                 }
@@ -214,20 +212,26 @@ public class NodoB {
             }
             if (aux.size == i + 1) {
                 if (aux.datos[i].hijoDer != null) {
-                    aux.datos[i].hijoDer.eliminar(aux.datos[i].hijoDer, clave1, i);
+                    eliminar(aux.datos[i].hijoDer, clave1, i);
                 }
                 break;
             }
         }
     }
 
-    private void eliminar(int pos, int posPadre, NodoB punt, int finalDir) {
+    private void eliminar(int pos, int posPadre, NodoB punt, int finalDir, NodoB padre) {
+        //Pos = finalDir posicion del elemento a eliminar
+        //posPadre = posicion del padre/ nodoB padre=padre de punt
         int tamaño = punt.size;
         if (pos != tamaño - 1) {
+            //Si el nodo a eliminar no es el ultimo del arreglo
             if (punt.datos[pos + 1].hijoIzq == null) {
+                //si no contiene hijo a la izquierda     | 
+                // moviendo los nodos hacia atras <---- [0][1][2] now [1][2]
                 boolean value = fix(pos, punt);
                 if (value) {
-                    punt.prestar(punt.padre, posPadre, finalDir, posPadre, punt);
+                    //prestar dato
+                    prestar(padre, posPadre, finalDir, posPadre, punt);
                 } else {
 
                 }
@@ -236,7 +240,7 @@ public class NodoB {
             if (punt.datos[pos].hijoIzq == null && punt.datos[pos].hijoDer == null) {
                 boolean value = fix(pos, punt);
                 if (value) {
-                    punt.prestar(punt.padre, posPadre, finalDir, posPadre, punt);
+                    prestar(padre, posPadre, finalDir, posPadre, punt);
                 } else {
 
                 }
@@ -245,16 +249,13 @@ public class NodoB {
     }
 
     private boolean fix(int i, NodoB punt) {
-        System.out.println("this--------" + punt.datos[0].getDato().getClave());
         for (int j = i; j < punt.size; j++) {
             try {
                 try {
                     punt.datos[j + 1].key = punt.datos[j + 1].key - 1;
                 } catch (NullPointerException ex) {
                 }
-
                 punt.datos[j] = punt.datos[j + 1];
-
             } catch (ArrayIndexOutOfBoundsException e) {
 
             }
@@ -263,66 +264,168 @@ public class NodoB {
         return punt.size < 2;
     }
 
-    private void prestar(NodoB aux, int pos, int dir, int posPadre, NodoB href) {
-
+    private boolean prestar(NodoB aux, int pos, int dir, int posPadre, NodoB href) {
+        //Padre, posicion del padre, posicion del hijo, psocion del padre, referencia al hijo
         if (pos < aux.size - 1) {
+            //si no se ha llegado al ultimo indice del arreglo del padre [][][][last]
             if (aux.datos[pos + 1].hijoIzq.size <= 2) {
-                prestar(aux, pos + 1, dir, posPadre, href);
+                //Mientras [padre] sus hijos <2 seguir viendo quien tiene menos 
+                boolean v = prestar(aux, pos + 1, dir, posPadre, href);
+                if (v) {
+                    delete3(aux, pos);
+                }
+                return v;
             } else {
-
+                delete3(aux, pos);
+                return true;
             }
         } else {
-
             try {
-                if (aux.datos[pos].hijoIzq != null && aux.datos[pos].hijoDer != null) {
-                    if (aux.datos[pos].hijoIzq.size > 2) {
-
+                if (aux.datos[pos].hijoIzq.size > 2) {
+                    ruta r1 = aux.datos[pos].hijoIzq.datos[0].getDato();
+                    ruta r2 = aux.datos[pos].getDato();
+                    fix(0, aux.datos[pos].hijoIzq);
+                    aux.datos[pos].setDato(r1);
+                    aux.datos[pos - 1].hijoIzq.add(r2);
+                    return true;
+                } else {
+                    if (aux.datos[pos].hijoDer.size > 2) {
+                        ruta r1 = aux.datos[pos].hijoDer.datos[0].getDato();
+                        ruta r2 = aux.datos[pos].getDato();
+                        fix(0, aux.datos[pos].hijoDer);
+                        aux.datos[pos].setDato(r1);
+                        aux.datos[pos].hijoIzq.add(r2);
+                        return true;
                     } else {
-                        System.out.println("uniendo");
-                        unir(dir, posPadre, aux, href);
-
+                        prestarHiz(aux, posPadre, dir, posPadre, href);
+                        return false;
                     }
                 }
-
             } catch (NullPointerException e) {
             }
 
         }
 
+        return false;
+    }
+
+    private boolean prestarHiz(NodoB aux, int pos, int dir, int posPadre, NodoB href) {
+        if (pos > 0) {
+            //si no se ha llegado al ultimo indice del arreglo del padre [][][][last]
+            if (aux.datos[pos - 1].hijoIzq.size <= 2) {
+                //Mientras [padre] sus hijos <2 seguir viendo quien tiene menos 
+                boolean v = prestarHiz(aux, pos - 1, dir, posPadre, href);
+                if (v) {
+                    if (pos == posPadre) {
+                        delete(aux, pos);
+                        delete2(aux, pos);
+                    } else {
+                        delete(aux, pos);
+                    }
+                }
+                return v;
+            } else {
+                delete(aux, pos);
+                if (pos == posPadre && posPadre == aux.size - 1) {
+                    delete2(aux, pos);
+                }
+                arreglarPuntero(aux);
+                return true;
+            }
+        } else {
+
+            try {
+                if (aux.datos[pos].hijoIzq.size > 2) {
+
+                } else {
+                    unir(dir, posPadre, aux, href);
+                }
+            } catch (NullPointerException e) {
+            }
+        }
+        return false;
+    }
+
+    private void delete(NodoB aux, int pos) {
+        int posx = aux.datos[pos - 1].hijoIzq.size - 1;
+        ruta izq = aux.datos[pos - 1].hijoIzq.datos[posx].getDato();
+        ruta dad = aux.datos[pos - 1].getDato();
+        aux.datos[pos].hijoIzq.add(dad);
+        aux.datos[pos - 1].setDato(izq);
+        aux.datos[pos - 1].hijoIzq.datos[posx] = null;
+        aux.datos[pos - 1].hijoIzq.size -= 1;
+
+    }
+
+    private void delete2(NodoB aux, int pos) {
+        //eliminar cuando es el ultimo nodo
+        ruta dad = aux.datos[pos].getDato();
+        int posx = aux.datos[pos].hijoIzq.size - 1;
+        ruta izq = aux.datos[pos].hijoIzq.datos[posx].getDato();
+        aux.datos[pos].setDato(izq);
+        aux.datos[pos].hijoDer.add(dad);
+        aux.datos[pos].hijoIzq.size -= 1;
+        aux.datos[pos].hijoIzq.datos[posx] = null;
+    }
+
+    private void delete3(NodoB aux, int pos) {
+        ruta r1 = aux.datos[pos + 1].hijoIzq.datos[0].getDato();
+        ruta r2 = aux.datos[pos].getDato();
+        fix(0, aux.datos[pos + 1].hijoIzq);
+        aux.datos[pos].setDato(r1);
+        aux.datos[pos].hijoIzq.add(r2);
     }
 
     private void unir(int pos, int posPadre, NodoB punt, NodoB href) {
         try {
-            //Obteniendo el dato en (0) donde se elimino
-            ruta rta = href.datos[pos].getDato();
-            //asignando el valor a su siguiente hermano
-            punt.datos[posPadre + 1].hijoIzq.add(rta);
-            //obteniendo el valor intermedio entre su hermano y este (padre) y asignarlo
-            rta = punt.datos[posPadre].getDato();
-            punt.datos[posPadre + 1].hijoIzq.add(rta);
-            //mover <- para atras los nodos del padre
-            punt.fix(posPadre, punt);
-            //configurar punteros
-            arreglarPuntero(punt.padre);
+            if (posPadre == punt.size - 1) {
+                int opc = punt.datos[posPadre].hijoDer.size;
+                    ruta rta = punt.datos[posPadre].hijoDer.datos[0].getDato();
+                    ruta rt = punt.datos[posPadre].getDato();
+                    punt.datos[posPadre].hijoIzq.add(rta);
+                    punt.datos[posPadre].hijoIzq.add(rt);
+                    if(opc!=1){
+                    ruta tmp=punt.datos[posPadre].hijoDer.datos[1].getDato();
+                    punt.datos[posPadre].hijoIzq.add(tmp);
+                    }
+                    punt.datos[posPadre - 1].hijoDer = punt.datos[posPadre].hijoIzq;
+                    punt.size-=1;
+                    punt.datos[posPadre] = null;
+                    arreglarPuntero(punt);
 
+            } else {
+                pos=0;
+                //Obteniendo el dato en (0) donde se elimino
+                ruta rta = href.datos[pos].getDato();
+                //asignando el valor a su siguiente hermano
+                punt.datos[posPadre + 1].hijoIzq.add(rta);
+                //obteniendo el valor intermedio entre su hermano y este (padre) y asignarlo
+                rta = punt.datos[posPadre].getDato();
+                punt.datos[posPadre + 1].hijoIzq.add(rta);
+                //mover <- para atras los nodos del padre
+                fix(posPadre, punt);
+                //configurar punteros
+                arreglarPuntero(punt);
+            }
         } catch (NullPointerException e) {
+            System.out.println(e.getMessage());
         }
 
     }
 
-    private void unir2(int pos, int posPadre, NodoB punt) {
-        ruta rta = punt.datos[pos].getDato();
-        punt.padre.datos[posPadre + 1].hijoIzq.add(rta);
-        int posi = getPos(rta, punt.padre.datos[posPadre + 1].hijoIzq);
-        punt.padre.datos[posPadre + 1].hijoIzq.datos[posi] = punt.datos[pos];
-        rta = punt.padre.datos[posPadre].getDato();
-        punt.padre.datos[posPadre + 1].hijoIzq.add(rta);
-        punt.padre.fix(posPadre, punt.padre);
-        punt.padre.datos[0].hijoIzq.datos[posi + 1].hijoIzq = punt.padre.datos[0].hijoIzq.datos[posi].hijoDer;
-        punt.padre.datos[0].hijoIzq.datos[posi].hijoDer = null;
-        punt.padre.datos[0].hijoIzq.datos[posi].key = posi + 1;
-        arreglarPuntero(punt.padre.padre);
-
+    private void unir2(int pos, int posPadre, NodoB punt, NodoB dad) {
+        //Posicion del Nodo, posicion del padre, href del nodo, href del padre
+        Nodo href = punt.datos[0];
+        ruta rta = dad.datos[posPadre].getDato();
+        NodoB hijoDer = punt.datos[0].hijoDer;
+        dad.datos[posPadre + 1].hijoIzq.add(href);
+        fix(posPadre, dad);
+        punt = dad.datos[posPadre].hijoIzq;
+        punt.add(rta);
+        ordenarDatos(true, punt);
+        int getpos = getPos(rta, punt);
+        punt.datos[getpos].hijoIzq = hijoDer;
+        arreglarPuntero(punt.padre);
     }
 
 }
