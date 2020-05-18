@@ -7,7 +7,6 @@ import EstructuraArbolB.ruta;
 import java.util.ArrayList;
 
 public class NodoGrafo {
-
     ArrayList<NodoGrafo> href;
     ArrayList<ruta> ruta;
     final String name;
@@ -15,7 +14,6 @@ public class NodoGrafo {
     private String diagrama;
     private ArrayList<href> referencias;
     private ArrayList<nodosForDiagram> nodos;
-
     public ArrayList<nodosForDiagram> getNodos() {
         return nodos;
     }
@@ -59,8 +57,6 @@ public class NodoGrafo {
         isChech = new ArrayList<>();
         String lugares = search(this);
         String array[] = lugares.split("\n");
-        //href t = new href();
-        //this.diagrama = t.generarDiagrama(referencias, nodos);
         return array;
     }
 

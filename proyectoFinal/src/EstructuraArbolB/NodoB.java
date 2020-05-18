@@ -29,8 +29,10 @@ public class NodoB {
         for (int i = 0; i < aux.size; i++) {
             Nodo tmp = aux.datos[i];
             double clave2 = tmp.getDato().getClave();
-
-            if (clave1 <= clave2) {
+            if (clave1 == clave2) {
+                return;
+            }
+            if (clave1 < clave2) {
                 if (aux.datos[i].hijoIzq != null) {
                     aux.datos[i].hijoIzq.buscarNodo(aux.datos[i].hijoIzq, rta);
                     break;
@@ -194,27 +196,51 @@ public class NodoB {
     void eliminar(NodoB aux, double clave1, int posPadre) {
         for (int i = 0; i < aux.size; i++) {
             Nodo tmp = aux.datos[i];
+            if (tmp == null) {
+                break;
+            }
             double clave2 = tmp.getDato().getClave();
             if (clave1 == clave2) {
-                eliminar(i, posPadre, aux, i, aux.padre);
-                break;
+                if (ArbolB.valid) {
+                    if (ArbolB.cnt == 1) {
+                        eliminar(i, posPadre, aux, i, aux.padre);
+                        arreglarPuntero(ArbolB.raiz);
+                        if (aux.padre.size < 2) {
+                            if (aux.padre != null) {
+                                unir2(i, posPadre, aux, aux.padre);
+
+                            }
+                        }
+                        return;
+                    }
+                    ArbolB.cnt++;
+                } else {
+                    eliminar(i, posPadre, aux, i, aux.padre);
+                    arreglarPuntero(ArbolB.raiz);
+                    if (aux.padre.size < 2) {
+                        if (aux.padre != null) {
+                            unir2(i, posPadre, aux, aux.padre);
+                            return;
+                        }
+                    }
+                    return;
+
+                }
+
             }
             if (clave1 < clave2) {
                 if (aux.datos[i].hijoIzq != null) {
-                    aux.datos[i].hijoIzq.eliminar(aux.datos[i].hijoIzq, clave1, i);
-                    if (aux.size < 2) {
-                        if (aux.padre != null) {
-                            unir2(i, posPadre, aux, aux.padre);
-                        }
-                    }
+                    eliminar(aux.datos[i].hijoIzq, clave1, i);
+                    return;
                 }
-                break;
+
             }
             if (aux.size == i + 1) {
                 if (aux.datos[i].hijoDer != null) {
                     eliminar(aux.datos[i].hijoDer, clave1, i);
+                    return;
                 }
-                break;
+
             }
         }
     }
@@ -225,17 +251,22 @@ public class NodoB {
         int tamaño = punt.size;
         if (pos != tamaño - 1) {
             //Si el nodo a eliminar no es el ultimo del arreglo
-            if (punt.datos[pos + 1].hijoIzq == null) {
-                //si no contiene hijo a la izquierda     | 
-                // moviendo los nodos hacia atras <---- [0][1][2] now [1][2]
-                boolean value = fix(pos, punt);
-                if (value) {
-                    //prestar dato
-                    prestar(padre, posPadre, finalDir, posPadre, punt);
-                } else {
+            try {
+                if (punt.datos[pos + 1].hijoIzq == null) {
+                    //si no contiene hijo a la izquierda     | 
+                    // moviendo los nodos hacia atras <---- [0][1][2] now [1][2]
+                    boolean value = fix(pos, punt);
+                    if (value) {
+                        //prestar dato
+                        prestar(padre, posPadre, finalDir, posPadre, punt);
 
+                    } else {
+
+                    }
                 }
+            } catch (NullPointerException e) {
             }
+
         } else {
             if (punt.datos[pos].hijoIzq == null && punt.datos[pos].hijoDer == null) {
                 boolean value = fix(pos, punt);
@@ -244,6 +275,24 @@ public class NodoB {
                 } else {
 
                 }
+            } else {
+                Nodo direc = punt.datos[pos].hijoDer.datos[0];
+                ruta key = null;
+                while (direc != null) {
+                    if (direc.hijoIzq != null) {
+                        direc = direc.hijoIzq.datos[0];
+                    } else {
+                        key = direc.getDato();
+                        break;
+                    }
+
+                }
+                ArbolB.cnt = 0;
+                ArbolB.valid = true;
+                punt.datos[pos].setDato(key);
+                ArbolB.eliminar(key.getClave());
+                ArbolB.valid = false;
+                ArbolB.cnt = 0;
             }
         }
     }
@@ -380,21 +429,21 @@ public class NodoB {
         try {
             if (posPadre == punt.size - 1) {
                 int opc = punt.datos[posPadre].hijoDer.size;
-                    ruta rta = punt.datos[posPadre].hijoDer.datos[0].getDato();
-                    ruta rt = punt.datos[posPadre].getDato();
-                    punt.datos[posPadre].hijoIzq.add(rta);
-                    punt.datos[posPadre].hijoIzq.add(rt);
-                    if(opc!=1){
-                    ruta tmp=punt.datos[posPadre].hijoDer.datos[1].getDato();
+                ruta rta = punt.datos[posPadre].hijoDer.datos[0].getDato();
+                ruta rt = punt.datos[posPadre].getDato();
+                punt.datos[posPadre].hijoIzq.add(rta);
+                punt.datos[posPadre].hijoIzq.add(rt);
+                if (opc != 1) {
+                    ruta tmp = punt.datos[posPadre].hijoDer.datos[1].getDato();
                     punt.datos[posPadre].hijoIzq.add(tmp);
-                    }
-                    punt.datos[posPadre - 1].hijoDer = punt.datos[posPadre].hijoIzq;
-                    punt.size-=1;
-                    punt.datos[posPadre] = null;
-                    arreglarPuntero(punt);
+                }
+                punt.datos[posPadre - 1].hijoDer = punt.datos[posPadre].hijoIzq;
+                punt.size -= 1;
+                punt.datos[posPadre] = null;
+                arreglarPuntero(punt);
 
             } else {
-                pos=0;
+                pos = 0;
                 //Obteniendo el dato en (0) donde se elimino
                 ruta rta = href.datos[pos].getDato();
                 //asignando el valor a su siguiente hermano
@@ -415,17 +464,19 @@ public class NodoB {
 
     private void unir2(int pos, int posPadre, NodoB punt, NodoB dad) {
         //Posicion del Nodo, posicion del padre, href del nodo, href del padre
-        Nodo href = punt.datos[0];
-        ruta rta = dad.datos[posPadre].getDato();
-        NodoB hijoDer = punt.datos[0].hijoDer;
-        dad.datos[posPadre + 1].hijoIzq.add(href);
-        fix(posPadre, dad);
-        punt = dad.datos[posPadre].hijoIzq;
-        punt.add(rta);
-        ordenarDatos(true, punt);
-        int getpos = getPos(rta, punt);
-        punt.datos[getpos].hijoIzq = hijoDer;
-        arreglarPuntero(punt.padre);
+        if (dad.size != 1) {
+            Nodo href = punt.datos[0];
+            ruta rta = dad.datos[posPadre].getDato();
+            NodoB hijoDer = punt.datos[0].hijoDer;
+            dad.datos[posPadre + 1].hijoIzq.add(href);
+            fix(posPadre, dad);
+            punt = dad.datos[posPadre].hijoIzq;
+            punt.add(rta);
+            ordenarDatos(true, punt);
+            int getpos = getPos(rta, punt);
+            punt.datos[getpos].hijoIzq = hijoDer;
+            arreglarPuntero(punt.padre);
+        }
     }
 
 }

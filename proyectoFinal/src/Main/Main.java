@@ -35,6 +35,7 @@ import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
+ 
     private static String path;
     private static Scene initialScene;
     public static Scene View;
@@ -60,6 +61,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage s) throws Exception {
+       
         is = false;
         GridPane grid = new GridPane();
         grid.setHgap(20);
@@ -86,10 +88,11 @@ public class Main extends Application {
             path = URL.getText();
             visorDeImagen = new ControladorVistaInicio();
             try {
-                path = "/home/jhonny/Escritorio/DocumentoDeEntrada.txt";
+                path="/home/jhonny/Escritorio/DocumentoDeEntrada.txt";
                 file = new AnalizarArchivo(path);
                 if (file.crearArregrlo()) {
                     tabla = new TablaTransiciones(file.getListadoRutas(), file.getNodosGrafo());
+                    
                     path = tabla.getPath();
                     Menu m = new Menu("Opciones");
                     MenuItem m1 = new MenuItem("Nuevo viaje");
@@ -119,7 +122,7 @@ public class Main extends Application {
                     });
                     m2.setOnAction((t) -> {
                         if (true) {
-                            abrirReportes(viaje.x, viaje.y);
+                            abrirReportes(0, 3);
                         }
                     });
                     s.setScene(View);
@@ -143,40 +146,8 @@ public class Main extends Application {
     public static void main(String[] args) {
         //
 
-        //launch(args);
-        ArbolB t = new ArbolB();
-        /*t.insertarDato(new ruta(null, null, 50, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 49, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 48, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 47, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 40, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 39, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 46, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 45, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 44, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 43, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 42, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 41, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 38, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 37, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 36, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 35, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 34, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 33, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 32, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 31, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 30, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 29, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 28, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 27, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 26, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 25, 0, 0, 0));
-        t.eliminar(25);
-        t.eliminar(31);
-        t.eliminar(30);
-        t.eliminar(29);
-        t.eliminar(40);*/
-
+        launch(args);
+        /*ArbolB t = new ArbolB();
         t.insertarDato(new ruta(null, null, 20, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 21, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 19, 0, 0, 0));
@@ -195,11 +166,20 @@ public class Main extends Application {
         t.insertarDato(new ruta(null, null, 6, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 22, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 23, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 15.1, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 15.5, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 15.6, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 5, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 4, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 3, 0, 0, 0));
+        //t.eliminar(11);
+        t.eliminar(10);
+        t.eliminar(9);
+        t.insertarDato(new ruta(null, null, 24, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 25, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 26, 0, 0, 0));
+        //t.insertarDato(new ruta(null, null, 27, 0, 0, 0));
         
-        t.imprimir();
+        t.eliminar(12);
+        
+        t.imprimir();*/
 
     }
 

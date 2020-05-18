@@ -13,7 +13,6 @@ public class TablaTransiciones {
 
     private ArrayList<ruta> listaNodos;
     private static tabla mejorVehiculo[][], mejorPie[][], mejorGas[][], mejorDesgaste[][];
-    private static tabla peorDesgaste[][], peorVehiculo[][], peorPie[][], peorGas[][];
 
     ArrayList<NodoGrafo> Nodos;
     Object[][] tabla;
@@ -32,13 +31,9 @@ public class TablaTransiciones {
         this.Nodos = nodos;
         int x = this.Nodos.size();
         mejorVehiculo = new tabla[x][x];
-        peorVehiculo = new tabla[x][x];
         mejorPie = new tabla[x][x];
-        peorPie = new tabla[x][x];
         mejorGas = new tabla[x][x];
-        peorGas = new tabla[x][x];
         mejorDesgaste = new tabla[x][x];
-        peorDesgaste = new tabla[x][x];
         print();
     }
 
@@ -80,10 +75,6 @@ public class TablaTransiciones {
             mejorDesgaste[i][i] = new tabla(0, Nodos.get(i).name, i);
             mejorPie[i][i] = new tabla(0, Nodos.get(i).name, i);
         }
-        peorDesgaste = mejorDesgaste;
-        peorVehiculo = mejorVehiculo;
-        peorGas = mejorGas;
-        peorPie = mejorPie;
         generarGrafica(grafica, "grafica", "diagram");
         File f = new File("diagram.png");
         path = f.getAbsolutePath();
@@ -122,7 +113,6 @@ public class TablaTransiciones {
                 if (j != i) {
                     for (int k = 0; k < x; k++) {
                         if (k != i) {
-
                             tabla tb1 = mejorVehiculo[i][k];
                             tabla tb2 = mejorVehiculo[j][i];
                             double dato = mejorVehiculo[j][k].getDato();
@@ -155,7 +145,7 @@ public class TablaTransiciones {
                 }
             }
         }
-       leer();
+//       leer();
 
     }
 
@@ -191,7 +181,6 @@ public class TablaTransiciones {
                 if (suma < dato) {
                     switch (opc) {
                         case 1:
-                            System.out.println(t1.getDato() + " " + t2.getDato());
                             mejorVehiculo[j][k].setDato(suma);
                             mejorVehiculo[j][k].setVertice(mejorVehiculo[i][i].getVertice());
                             mejorVehiculo[j][k].setInt(i);

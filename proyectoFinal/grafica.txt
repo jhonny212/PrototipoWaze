@@ -1,20 +1,15 @@
 digraph G {
-node [shape=record];
-struct29 [label="<f1> 15.1"]; 
- struct7 [label="<f1> 10.0| <f2> 13.0"]; 
- struct1 [label="<f1> 6.0| <f2> 7.0| <f3> 8.0| <f4> 9.0"]; 
- struct20 [label="<f1> 11.0| <f2> 12.0"]; 
- struct16 [label="<f1> 14.0| <f2> 15.0"]; 
- struct7:f1 -> struct1:f1; 
-struct7:f2 -> struct20:f1; 
-struct7:f2 -> struct16:f1; 
-struct30 [label="<f1> 16.0| <f2> 19.0"]; 
- struct28 [label="<f1> 15.5| <f2> 15.6"]; 
- struct12 [label="<f1> 17.0| <f2> 18.0"]; 
- struct8 [label="<f1> 20.0| <f2> 21.0| <f3> 22.0| <f4> 23.0"]; 
- struct30:f1 -> struct28:f1; 
-struct30:f2 -> struct12:f1; 
-struct30:f2 -> struct8:f1; 
-struct29:f1 -> struct7:f1; 
-struct29:f1 -> struct30:f1; 
+A -> B;
+A -> C;
+B -> A;
+B -> C;
+B -> D;
+C -> A;
+C -> D;
+C -> E;
+D -> B;
+D -> C;
+D -> E;
+E -> C;
+E -> D;
 }

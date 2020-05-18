@@ -1,0 +1,8 @@
+digraph G {node0[fillcolor=yellow, style="rounded,filled", shape=circle, label=A] 
+node0-> node2 [label="8.0"]
+node2[fillcolor=yellow, style="rounded,filled", shape=circle, label=C] 
+node2-> node4 [label="2.0"]
+node4[fillcolor=yellow, style="rounded,filled", shape=circle, label=E] 
+node4-> node3 [label="7.0"]
+node3[fillcolor=yellow, style="rounded,filled", shape=circle, label=D] 
+}

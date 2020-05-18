@@ -1,9 +1,11 @@
 package EstructuraArbolB;
 
 public class ruta {
-    private final lugar origen,destino;
-    private final double tiempoVehiculo,tiempoPie,consumoGas,desgastePersona,clave;
 
+    private lugar origen, destino;
+    private double tiempoVehiculo, tiempoPie, consumoGas, desgastePersona;
+    private double clave;
+    private String name;
     public ruta(lugar origen, lugar destino, double tiempoVehiculo, double tiempoPie, double consumoGas, double desgastePersona) {
         this.origen = origen;
         this.destino = destino;
@@ -11,9 +13,10 @@ public class ruta {
         this.tiempoPie = tiempoPie;
         this.consumoGas = consumoGas;
         this.desgastePersona = desgastePersona;
-        this.clave=tiempoVehiculo;
+        this.clave = tiempoVehiculo;
     }
-     public lugar getOrigen() {
+
+    public lugar getOrigen() {
         return origen;
     }
 
@@ -41,5 +44,17 @@ public class ruta {
         return clave;
     }
 
-   
+    public void setClave(double clave) {
+        this.clave = clave;
+    }
+
+    public ruta(double clave, String name) {
+        this.clave = clave;
+        this.name=name;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
 }

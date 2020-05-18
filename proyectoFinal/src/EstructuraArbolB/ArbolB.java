@@ -9,9 +9,12 @@ public class ArbolB {
 
     static NodoB raiz;
     static int contador;
-
+    public static boolean valid;
+    public static int cnt;
     public ArbolB() {
         contador = 1;
+        valid=false;
+        cnt=0;
         this.raiz = new NodoB(contador);
     }
 
@@ -76,9 +79,9 @@ public class ArbolB {
                 Nodo tmp = aux.datos[i];
                 if (tmp != null) {
                     if (i == 0) {
-                        msj += " [label=\"<f" + tmp.key + "> " + tmp.getDato().getClave();
+                        msj += " [label=\"<f" + tmp.key + "> " + tmp.getDato().getName();
                     } else {
-                        msj += "| <f" + tmp.key + "> " + tmp.getDato().getClave();
+                        msj += "| <f" + tmp.key + "> " + tmp.getDato().getName();
                     }
                     if (tmp.hijoIzq != null) {
                         int cod = i + 1;
@@ -107,7 +110,7 @@ public class ArbolB {
         return msj += "\"]; \n " + tmp1 + tmp2 + tmp3;
     }
 
-    public  void eliminar(double rta){
+    public static void eliminar(double rta){
     
     raiz.eliminar(raiz,rta,0);
     }

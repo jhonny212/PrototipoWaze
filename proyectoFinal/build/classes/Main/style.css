@@ -8,3 +8,24 @@ and open the template in the editor.
     Author     : jhonny
 */
 
+#lb1, #lb2{
+    -fx-font-size: 30px;
+    -fx-background-color: #443d99;
+    -fx-text-fill: wheat;
+    -fx-border-radius: 15px;
+    -fx-border-color: black;
+    -fx-border-style: dashed;
+}
+#titl{
+    -fx-font-size: 45px;
+    -fx-background-color: #0c0c0c;
+    -fx-text-fill: white;
+    
+    
+}
+
+#cnt{
+    -fx-background-color: #cbcbcc;
+  
+    
+}
