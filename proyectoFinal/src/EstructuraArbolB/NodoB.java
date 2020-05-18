@@ -205,24 +205,12 @@ public class NodoB {
                     if (ArbolB.cnt == 1) {
                         eliminar(i, posPadre, aux, i, aux.padre);
                         arreglarPuntero(ArbolB.raiz);
-                        if (aux.padre.size < 2) {
-                            if (aux.padre != null) {
-                                unir2(i, posPadre, aux, aux.padre);
-
-                            }
-                        }
                         return;
                     }
                     ArbolB.cnt++;
                 } else {
                     eliminar(i, posPadre, aux, i, aux.padre);
                     arreglarPuntero(ArbolB.raiz);
-                    if (aux.padre.size < 2) {
-                        if (aux.padre != null) {
-                            unir2(i, posPadre, aux, aux.padre);
-                            return;
-                        }
-                    }
                     return;
 
                 }
@@ -231,6 +219,14 @@ public class NodoB {
             if (clave1 < clave2) {
                 if (aux.datos[i].hijoIzq != null) {
                     eliminar(aux.datos[i].hijoIzq, clave1, i);
+
+                    if (aux.padre != null) {
+                        if (aux.size < 2) {
+
+                            unir2(i, posPadre, aux, aux.padre);
+
+                        }
+                    }
                     return;
                 }
 
@@ -238,6 +234,11 @@ public class NodoB {
             if (aux.size == i + 1) {
                 if (aux.datos[i].hijoDer != null) {
                     eliminar(aux.datos[i].hijoDer, clave1, i);
+                    if (aux.padre != null) {
+                        if (aux.size < 2) {
+                            unir2(i, posPadre, aux, aux.padre);
+                        }
+                    }
                     return;
                 }
 
@@ -265,6 +266,7 @@ public class NodoB {
                     }
                 }
             } catch (NullPointerException e) {
+
             }
 
         } else {
@@ -331,11 +333,19 @@ public class NodoB {
         } else {
             try {
                 if (aux.datos[pos].hijoIzq.size > 2) {
-                    ruta r1 = aux.datos[pos].hijoIzq.datos[0].getDato();
-                    ruta r2 = aux.datos[pos].getDato();
-                    fix(0, aux.datos[pos].hijoIzq);
-                    aux.datos[pos].setDato(r1);
-                    aux.datos[pos - 1].hijoIzq.add(r2);
+                    try {
+                        ruta r1 = aux.datos[pos].hijoIzq.datos[0].getDato();
+                        ruta r2 = aux.datos[pos].getDato();
+                        fix(0, aux.datos[pos].hijoIzq);
+                        aux.datos[pos].setDato(r1);
+                        if (pos == aux.size - 1) {
+                            aux.datos[pos].hijoDer.add(r2);
+                        } else {
+                            aux.datos[pos - 1].hijoIzq.add(r2);
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                    }
+
                     return true;
                 } else {
                     if (aux.datos[pos].hijoDer.size > 2) {
@@ -437,10 +447,16 @@ public class NodoB {
                     ruta tmp = punt.datos[posPadre].hijoDer.datos[1].getDato();
                     punt.datos[posPadre].hijoIzq.add(tmp);
                 }
-                punt.datos[posPadre - 1].hijoDer = punt.datos[posPadre].hijoIzq;
-                punt.size -= 1;
-                punt.datos[posPadre] = null;
-                arreglarPuntero(punt);
+                int aux = posPadre - 1;
+                try {
+                    punt.datos[aux].hijoDer = punt.datos[posPadre].hijoIzq;
+                    punt.size -= 1;
+                    punt.datos[posPadre] = null;
+                    arreglarPuntero(punt);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    ArbolB.raiz = punt.datos[0].hijoIzq;
+                    punt.datos[0].hijoIzq.padre = null;
+                }
 
             } else {
                 pos = 0;
@@ -464,7 +480,7 @@ public class NodoB {
 
     private void unir2(int pos, int posPadre, NodoB punt, NodoB dad) {
         //Posicion del Nodo, posicion del padre, href del nodo, href del padre
-        if (dad.size != 1) {
+        if (dad.size - 1 != posPadre) {
             Nodo href = punt.datos[0];
             ruta rta = dad.datos[posPadre].getDato();
             NodoB hijoDer = punt.datos[0].hijoDer;
@@ -476,6 +492,51 @@ public class NodoB {
             int getpos = getPos(rta, punt);
             punt.datos[getpos].hijoIzq = hijoDer;
             arreglarPuntero(punt.padre);
+        } else {
+            ruta rt = dad.datos[posPadre].getDato();
+            NodoB href = dad.padre;
+            //Obteniendo el Nodo donde size<2
+            Nodo dt = punt.datos[0];
+            NodoB hrefDer = null;
+            int opc = 0;
+            if (punt.equals(dad.datos[posPadre].hijoIzq)) {
+                hrefDer = dad.datos[posPadre].hijoDer;
+                opc = 0;
+            } else {
+                hrefDer = dad.datos[posPadre].hijoIzq;
+                opc = 1;
+            }
+
+            //obtenniendo su -> a la derecha
+            NodoB der = null;
+            if (opc == 1) {
+                der = hrefDer.datos[hrefDer.size-1].hijoDer;
+            } else {
+                der = dt.hijoDer;
+            }
+            //A su NodoB hermanod pasar su valor
+            hrefDer.add(dt);
+            //Ordenar los datos
+            ordenarDatos(true, hrefDer);
+            //Agregar la ruta del padre
+            hrefDer.add(rt);
+            //Obtener ubicacion
+            int getPos = getPos(rt, hrefDer);
+            //Asignar hjo izq
+            hrefDer.datos[getPos].hijoIzq = der;
+            //Reasignar el padre
+            if (posPadre == 0) {
+                hrefDer.padre = href;
+                if (href == null) {
+                    //Si el padre era la raiz re asignar valor de la raiz
+                    ArbolB.raiz = hrefDer;
+                }
+            } else {
+                dad.datos[posPadre - 1].hijoDer = hrefDer;
+                dad.datos[posPadre] = null;
+                dad.size -= 1;
+            }
+
         }
     }
 

@@ -15,7 +15,7 @@ public class ArbolB {
         contador = 1;
         valid=false;
         cnt=0;
-        this.raiz = new NodoB(contador);
+        raiz = new NodoB(contador);
     }
 
     public void insertarDato(ruta rta) {
@@ -79,20 +79,20 @@ public class ArbolB {
                 Nodo tmp = aux.datos[i];
                 if (tmp != null) {
                     if (i == 0) {
-                        msj += " [label=\"<f" + tmp.key + "> " + tmp.getDato().getName();
+                        msj += " [label=\"<f" + tmp.key + "> " + tmp.getDato().getClave();
                     } else {
-                        msj += "| <f" + tmp.key + "> " + tmp.getDato().getName();
+                        msj += "| <f" + tmp.key + "> " + tmp.getDato().getClave();
                     }
                     if (tmp.hijoIzq != null) {
                         int cod = i + 1;
-                        tmp3 += "struct" + aux.NoNodo + ":f" + cod + " -> struct" + tmp.hijoIzq.NoNodo + ":f" + 1 + "; \n";
+                        tmp3 += "struct" + aux.NoNodo + ":f" + cod + " -> struct" + tmp.hijoIzq.NoNodo + ":f" + 1 + "[label=\"izq\"] ;\n";
                         tmp1 += printThreeB(tmp.hijoIzq);
 
                     }
                     if (tmp.hijoDer != null) {
                         if(i==aux.size-1){
                         int cod = i + 1;
-                        tmp3 += "struct" + aux.NoNodo + ":f" + cod + " -> struct" + tmp.hijoDer.NoNodo + ":f" + 1 + "; \n";
+                        tmp3 += "struct" + aux.NoNodo + ":f" + cod + " -> struct" + tmp.hijoDer.NoNodo + ":f" + 1 + "[label=\"derecha\"] ;\n";
                         tmp2 += printThreeB(tmp.hijoDer);
                    
                         }

@@ -4,6 +4,8 @@ import ClassesForInterfaz.AnalizarArchivo;
 import ClassesForInterfaz.ControladorVistaInicio;
 import ClassesForInterfaz.controlDecamino;
 import ClassesForInterfaz.nuevoViaje;
+import EstructuraArbolB.ArbolB;
+import EstructuraArbolB.ruta;
 import estructuraGrafo.TablaTransiciones;
 import java.io.IOException;
 import javafx.application.Application;
@@ -26,7 +28,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
- 
     private static String path;
     private static Scene initialScene;
     public static Scene View;
@@ -77,13 +78,14 @@ public class Main extends Application {
             path = URL.getText();
             visorDeImagen = new ControladorVistaInicio();
             try {
-                path="/home/jhonny/Escritorio/DocumentoDeEntrada.txt";
+                path = "/home/jhonny/Escritorio/DocumentoDeEntrada.txt";
                 file = new AnalizarArchivo(path);
                 if (file.crearArregrlo()) {
                     tabla = new TablaTransiciones(file.getListadoRutas(), file.getNodosGrafo());
-                    try{
-                    Thread.sleep(4000);
-                    }catch(InterruptedException ex){}
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException ex) {
+                    }
                     path = tabla.getPath();
                     Menu m = new Menu("Opciones");
                     MenuItem m1 = new MenuItem("Nuevo viaje");
@@ -137,10 +139,19 @@ public class Main extends Application {
     public static void main(String[] args) {
         //
 
-        launch(args);
-        /*ArbolB t = new ArbolB();
-        t.insertarDato(new ruta(null, null, 20, 0, 0, 0));
+        //launch(args);
+        ArbolB t = new ArbolB();
+        t.insertarDato(new ruta(null, null, 30, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 29, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 28, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 27, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 26, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 25, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 24, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 23, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 22, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 21, 0, 0, 0));
+        t.insertarDato(new ruta(null, null, 20, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 19, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 18, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 17, 0, 0, 0));
@@ -155,22 +166,10 @@ public class Main extends Application {
         t.insertarDato(new ruta(null, null, 8, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 7, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 6, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 22, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 23, 0, 0, 0));
         t.insertarDato(new ruta(null, null, 5, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 4, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 3, 0, 0, 0));
-        //t.eliminar(11);
+       
         t.eliminar(10);
-        t.eliminar(9);
-        t.insertarDato(new ruta(null, null, 24, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 25, 0, 0, 0));
-        t.insertarDato(new ruta(null, null, 26, 0, 0, 0));
-        //t.insertarDato(new ruta(null, null, 27, 0, 0, 0));
-        
-        t.eliminar(12);
-        
-        t.imprimir();*/
+        t.imprimir();
 
     }
 

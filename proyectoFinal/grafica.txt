@@ -1,4 +1,24 @@
 digraph G {
 node [shape=record];
-struct1 [label="<f1> D"]; 
- }
+struct25 [label="<f1> 22.0"]; 
+ struct39 [label="<f1> 7.0| <f2> 13.0| <f3> 16.0| <f4> 19.0"]; 
+ struct1 [label="<f1> 5.0| <f2> 6.0"]; 
+ struct38 [label="<f1> 8.0| <f2> 9.0| <f3> 11.0| <f4> 12.0"]; 
+ struct30 [label="<f1> 14.0| <f2> 15.0"]; 
+ struct24 [label="<f1> 17.0| <f2> 18.0"]; 
+ struct20 [label="<f1> 20.0| <f2> 21.0"]; 
+ struct39:f1 -> struct1:f1[label="izq"] ;
+struct39:f2 -> struct38:f1[label="izq"] ;
+struct39:f3 -> struct30:f1[label="izq"] ;
+struct39:f4 -> struct24:f1[label="izq"] ;
+struct39:f4 -> struct20:f1[label="derecha"] ;
+struct26 [label="<f1> 25.0| <f2> 28.0"]; 
+ struct16 [label="<f1> 23.0| <f2> 24.0"]; 
+ struct12 [label="<f1> 26.0| <f2> 27.0"]; 
+ struct8 [label="<f1> 29.0| <f2> 30.0"]; 
+ struct26:f1 -> struct16:f1[label="izq"] ;
+struct26:f2 -> struct12:f1[label="izq"] ;
+struct26:f2 -> struct8:f1[label="derecha"] ;
+struct25:f1 -> struct39:f1[label="izq"] ;
+struct25:f1 -> struct26:f1[label="derecha"] ;
+}
