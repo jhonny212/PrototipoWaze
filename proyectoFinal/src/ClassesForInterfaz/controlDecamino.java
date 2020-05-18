@@ -16,9 +16,11 @@ import javafx.scene.layout.GridPane;
  * @author jhonny
  */
 import static Main.Main.getContenido;
+import Main.ReportsController;
 import estructuraGrafo.NodoGrafo;
 import java.util.ArrayList;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 
 public class controlDecamino {
 
@@ -26,6 +28,7 @@ public class controlDecamino {
     GridPane panel;
     ComboBox comboBox;
     Label o, d;
+    TextArea rutas;
     int posO, posD;
     ArrayList<NodoGrafo> listado;
 
@@ -35,13 +38,19 @@ public class controlDecamino {
     String data;
     Button btn;
 
+    ReportsController rpt;
+
     public void crearContent() {
+        rpt = new ReportsController();
         this.posO = -1;
+
         panel = new GridPane();
         panel.setVgap(10);
         panel.setHgap(10);
         o = new Label();
         d = new Label();
+        rutas = new TextArea("....");
+        
         comboBox = new ComboBox();
         panel.add(new Label("Partida de inicio:"), 0, 0);
         panel.add(new Label("Partida de inicio:"), 1, 0);
@@ -51,16 +60,23 @@ public class controlDecamino {
         btn = new Button("Seleccionar ubicacion");
         panel.add(comboBox, 1, 2);
         panel.add(btn, 2, 2);
+        panel.add(rutas, 0, 3);
 
         btn.setOnAction((t) -> {
             data = comboBox.getSelectionModel().getSelectedItem().toString();
             if (!data.isBlank()) {
-                agregarItems(0, data);
+                agregarItems(data);
+                rpt.peor(getPos(data), new ArrayList<>(), new ArrayList(), -1, 0, true);
+                String caminos = rpt.getCaminos();
+                rpt.setCaminos("");
+                this.rutas.setText("Posibles caminos:\n" + caminos);
             }
         });
+        
         getContenido().getChildren().add(panel);
         comboBox.setDisable(true);
         btn.setDisable(true);
+        this.rutas.setEditable(false);
 
     }
 
@@ -70,21 +86,29 @@ public class controlDecamino {
         this.posO = posO;
         comboBox.setDisable(false);
         btn.setDisable(false);
-        o = new Label(origen);
-        d = new Label(destino);
-        agregarItems(0, origen);
+        o.setText(origen);
+        d.setText(destino);
+        agregarItems(origen);
+
+        int clave = getPos(origen);
+        int key = getPos(destino);
+        rpt.inicializar(clave, key, 0, listado);
+        rpt.peor(clave, new ArrayList<>(), new ArrayList(), -1, 0, true);
+        String caminos = rpt.getCaminos();
+        rpt.setCaminos("");
+        this.rutas.setText("Posibles caminos:\n" + caminos);
     }
     int pos = 0;
 
-    public void agregarItems(int pos, String dato) {
+    public void agregarItems(String dato) {
         if (!dato.equals(d.getText())) {
             comboBox.getItems().clear();
             for (int i = 0; i < listado.size(); i++) {
                 if (listado.get(i).getName().equals(dato)) {
                     for (int j = 0; j < listado.get(i).getHref().size(); j++) {
-                        String value=listado.get(i).getHref().get(j).getName();
+                        String value = listado.get(i).getHref().get(j).getName();
                         this.comboBox.getItems().add(value);
-                        int clave=getPos(value);
+                        int clave = getPos(value);
                         bThre.insertarDato(new ruta(clave, value));
                     }
                 }

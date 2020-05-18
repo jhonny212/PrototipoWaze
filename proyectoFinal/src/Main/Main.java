@@ -4,17 +4,11 @@ import ClassesForInterfaz.AnalizarArchivo;
 import ClassesForInterfaz.ControladorVistaInicio;
 import ClassesForInterfaz.controlDecamino;
 import ClassesForInterfaz.nuevoViaje;
-import EstructuraArbolB.ArbolB;
-import EstructuraArbolB.ruta;
 import estructuraGrafo.TablaTransiciones;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,10 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
@@ -61,7 +52,6 @@ public class Main extends Application {
 
     @Override
     public void start(Stage s) throws Exception {
-       
         is = false;
         GridPane grid = new GridPane();
         grid.setHgap(20);
@@ -83,7 +73,6 @@ public class Main extends Application {
 
         });
         Button open = new Button("Abrir");
-
         open.setOnAction(e -> {
             path = URL.getText();
             visorDeImagen = new ControladorVistaInicio();
@@ -92,7 +81,9 @@ public class Main extends Application {
                 file = new AnalizarArchivo(path);
                 if (file.crearArregrlo()) {
                     tabla = new TablaTransiciones(file.getListadoRutas(), file.getNodosGrafo());
-                    
+                    try{
+                    Thread.sleep(4000);
+                    }catch(InterruptedException ex){}
                     path = tabla.getPath();
                     Menu m = new Menu("Opciones");
                     MenuItem m1 = new MenuItem("Nuevo viaje");
@@ -138,7 +129,7 @@ public class Main extends Application {
         grid.add(open, 2, 1);
         initialScene = new Scene(grid, 700, 100);
         s.setScene(initialScene);
-        s.setResizable(false);
+        //s.setResizable(false);
         s.show();
 
     }
@@ -194,6 +185,7 @@ public class Main extends Application {
 
         } catch (IOException ex) {
         }
+        stage.setResizable(false);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

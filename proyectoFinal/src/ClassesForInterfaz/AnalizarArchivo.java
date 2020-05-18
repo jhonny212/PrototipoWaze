@@ -75,7 +75,9 @@ public class AnalizarArchivo {
         String Dato = "";
         String origen = "", destino = "";
         double timeVehiculo = 0, timePie = 0, gas = 0, desgaste = 0;
+        int cont=0;
         for (String array1 : array) {
+            cont++;
             switch (array1) {
                 case "<":
                     break;
@@ -127,7 +129,11 @@ public class AnalizarArchivo {
                 case "|":
                     break;
                 default:
+                    if(array1.equals(" ")){
+                    Dato+="_";
+                    }else{
                     Dato += array1;
+                    }
                     break;
 
             }

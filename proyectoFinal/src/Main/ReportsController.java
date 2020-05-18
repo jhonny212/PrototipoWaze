@@ -35,7 +35,7 @@ import javafx.scene.image.ImageView;
 public class ReportsController implements Initializable {
 
     private int x, y;
-    int longitud;
+
     NodoGrafo fin, origen;
     ArrayList<NodoGrafo> list;
     /**
@@ -64,7 +64,7 @@ public class ReportsController implements Initializable {
     private void vehiculo(ActionEvent event) {
         mejor(1);
         int pos = obtener(origen.getName());
-        peor(pos, new ArrayList<>(), new ArrayList<>(), 1, 0.0);
+        peor(pos, new ArrayList<>(), new ArrayList<>(), 1, 0.0, false);
         for (int i = 0; i < this.worst.size(); i++) {
             System.out.println(this.worst.get(i).getOrigen().name + "->" + this.worst.get(i).getDestino().name);
 
@@ -76,7 +76,7 @@ public class ReportsController implements Initializable {
     private void desgaste(ActionEvent event) {
         mejor(2);
         int pos = obtener(origen.getName());
-        peor(pos, new ArrayList<>(), new ArrayList<>(), 2, 0.0);
+        peor(pos, new ArrayList<>(), new ArrayList<>(), 2, 0.0, false);
         for (int i = 0; i < this.worst.size(); i++) {
             System.out.println(this.worst.get(i).getOrigen().name + "->" + this.worst.get(i).getDestino().name);
 
@@ -88,7 +88,7 @@ public class ReportsController implements Initializable {
     private void gas(ActionEvent event) {
         mejor(4);
         int pos = obtener(origen.getName());
-        peor(pos, new ArrayList<>(), new ArrayList<>(), 4, 0.0);
+        peor(pos, new ArrayList<>(), new ArrayList<>(), 4, 0.0, false);
         for (int i = 0; i < this.worst.size(); i++) {
             System.out.println(this.worst.get(i).getOrigen().name + "->" + this.worst.get(i).getDestino().name);
 
@@ -100,7 +100,7 @@ public class ReportsController implements Initializable {
     private void aPie(ActionEvent event) {
         mejor(3);
         int pos = obtener(origen.getName());
-        peor(pos, new ArrayList<>(), new ArrayList<>(), 3, 0.0);
+        peor(pos, new ArrayList<>(), new ArrayList<>(), 3, 0.0, false);
         for (int i = 0; i < this.worst.size(); i++) {
             System.out.println(this.worst.get(i).getOrigen().name + "->" + this.worst.get(i).getDestino().name);
 
@@ -118,6 +118,7 @@ public class ReportsController implements Initializable {
         this.list = list;
         worst = new ArrayList<>();
         total = 0.0;
+        caminos = "";
 
     }
 
@@ -174,7 +175,7 @@ public class ReportsController implements Initializable {
         }
         recorrido += "}";
 
-        this.title.setText("Se tiene un recorrido de->" + String.valueOf(totalDeCamino));
+        this.label1.setText("recorrido:" + String.valueOf(totalDeCamino));
         TablaTransiciones tb = new TablaTransiciones();
         tb.generarGrafica(recorrido, "mejor", "mejor");
         try {
@@ -201,7 +202,7 @@ public class ReportsController implements Initializable {
         return 0;
     }
 
-    public void peor(int indice, ArrayList<String> p, ArrayList<ruta> rutas, int tipo, double tota) {
+    public void peor(int indice, ArrayList<String> p, ArrayList<ruta> rutas, int tipo, double tota, boolean valid) {
         NodoGrafo list1 = list.get(indice);
         String name = list1.getName();
         for (int i = 0; i < list1.getRuta().size(); i++) {
@@ -211,8 +212,10 @@ public class ReportsController implements Initializable {
             ArrayList<ruta> rts = new ArrayList();
             double valor = 0.0;
             valor += tota;
-            for (int j = 0; j < rutas.size(); j++) {
-                rts.add(rutas.get(j));
+            if (!valid) {
+                for (int j = 0; j < rutas.size(); j++) {
+                    rts.add(rutas.get(j));
+                }
             }
             for (int j = 0; j < p.size(); j++) {
                 pila.add(p.get(j));
@@ -224,32 +227,44 @@ public class ReportsController implements Initializable {
                 pila.add(destino);
                 rts.add(rta);
                 int cod = rta.getDestino().NoNodo;
-                switch (tipo) {
-                    case 1:
-                        valor += rta.getTiempoVehiculo();
-                        break;
-                    case 2:
-                        valor += rta.getDesgastePersona();
-                        break;
-                    case 3:
-                        valor += rta.getTiempoPie();
-                        break;
-                    case 4:
-                        valor += rta.getConsumoGas();
-                        break;
+                if (!valid) {
+                    switch (tipo) {
+                        case 1:
+                            valor += rta.getTiempoVehiculo();
+                            break;
+                        case 2:
+                            valor += rta.getDesgastePersona();
+                            break;
+                        case 3:
+                            valor += rta.getTiempoPie();
+                            break;
+                        case 4:
+                            valor += rta.getConsumoGas();
+                            break;
 
+                    }
                 }
                 if (destino.equals(fin.getName())) {
-                    if (valor > total) {
+                    if (valor > total && (!valid)) {
                         total = valor;
                         this.worst = rts;
+                    } else {
+                        for (int j = 0; j < pila.size(); j++) {
+                            if (j != 0) {
+                                caminos += " Mover a ";
+                            }
+                            caminos += pila.get(j);
+                        }
+                        caminos += "\n";
                     }
                 } else {
-                    peor(cod, pila, rts, tipo, valor);
+                    peor(cod, pila, rts, tipo, valor, valid);
                 }
             }
         }
     }
+
+    private String caminos;
 
     boolean existe(String name, ArrayList<String> pila) {
         for (int i = 0; i < pila.size(); i++) {
@@ -286,6 +301,7 @@ public class ReportsController implements Initializable {
         }
         graph += "node" + this.worst.get(this.worst.size() - 1).getDestino().NoNodo + "[fillcolor=yellow, style=\"rounded,filled\", shape=circle, label=" + this.worst.get(this.worst.size() - 1).getDestino().name + "] \n";
         graph += "}";
+        this.label2.setText("recorrido:" + String.valueOf(total));
 
         TablaTransiciones tb = new TablaTransiciones();
         tb.generarGrafica(graph, "peor", "peor");
@@ -300,6 +316,15 @@ public class ReportsController implements Initializable {
         } catch (FileNotFoundException e) {
         }
         this.img2.setImage(source);
+        
+    }
+
+    public String getCaminos() {
+        return caminos;
+    }
+
+    public void setCaminos(String caminos) {
+        this.caminos = caminos;
     }
 
 }

@@ -18,11 +18,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.util.Pair;
+
 
 /**
  *
@@ -33,6 +31,12 @@ public class nuevoViaje {
     boolean isSelected;
     String digram;
     String origen,destino;
+    private String tipoTransporte;
+
+    public String getTipoTransporte() {
+        return tipoTransporte;
+    }
+    
     ObservableList<String> listado;
     public String getOrigen() {
         return origen;
@@ -63,14 +67,17 @@ public class nuevoViaje {
                         "Pie"
                 );
         ComboBox comboBox = new ComboBox(options);
+        comboBox.getSelectionModel().selectFirst();
+        comboBox.setOnAction((t) -> {
+            this.tipoTransporte=comboBox.getSelectionModel().getSelectedItem().toString();
+        });
         ComboBox Nodos = new ComboBox();
         ComboBox Fin = new ComboBox();
 
         for (int i = 0; i < nodos.size(); i++) {
-            System.out.println(nodos.get(i).getName());
             Nodos.getItems().add(nodos.get(i).getName());
         }
-
+        Nodos.getSelectionModel().selectFirst();
         Nodos.setOnAction(e -> {
             x = Nodos.getSelectionModel().getSelectedIndex();
             origen=Nodos.getSelectionModel().getSelectedItem().toString();
@@ -89,7 +96,7 @@ public class nuevoViaje {
         });
         Dialog dialog = new Dialog();
         dialog.setTitle("Login Dialog");
-        dialog.setHeaderText("Look, a Custom Login Dialog");
+        dialog.setHeaderText("Nuevo viaje");
         ButtonType loginButtonType = new ButtonType("Login", ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
@@ -120,6 +127,7 @@ public class nuevoViaje {
         dialog.getDialogPane().setContent(grid);
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.get().equals(loginButtonType)) {
+            try{
             String name=Fin.getSelectionModel().getSelectedItem().toString();
             for (int i = 0; i < nodos.size(); i++) {
                if(name.equals(nodos.get(i).getName())){
@@ -127,7 +135,14 @@ public class nuevoViaje {
                break;
                }
             }
-            isSelected = true;
+             isSelected = true;
+            }catch(NullPointerException e){
+            isSelected=false;
+            }
+            
+            
+            
+           
         }
 
     }
