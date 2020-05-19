@@ -20,6 +20,7 @@ import Main.ReportsController;
 import estructuraGrafo.NodoGrafo;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
@@ -113,7 +114,7 @@ public class controlDecamino {
                 bThre.eliminar(posv);
             });
             comboBox.getItems().clear();
-            
+
             for (int i = 0; i < listado.size(); i++) {
                 if (listado.get(i).getName().equals(dato)) {
                     for (int j = 0; j < listado.get(i).getHref().size(); j++) {
@@ -135,6 +136,12 @@ public class controlDecamino {
             }
             bThre.imprimir();
         } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information Dialog");
+            alert.setHeaderText(null);
+            alert.setContentText("Has llegado a tu destino!");
+
+            alert.showAndWait();
             comboBox.setDisable(true);
             btn.setDisable(true);
         }
