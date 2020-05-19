@@ -1,4 +1,15 @@
 digraph G {
-node [shape=record];
-struct1 [label="<f1> A| <f2> C| <f3> D"]; 
- }
+A -> B;
+A -> C;
+B -> A;
+B -> C;
+B -> D;
+C -> A;
+C -> D;
+C -> E;
+D -> B;
+D -> C;
+D -> E;
+E -> C;
+E -> D;
+}

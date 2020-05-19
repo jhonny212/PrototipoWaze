@@ -82,7 +82,7 @@ public class Main extends Application {
                 if (file.crearArregrlo()) {
                     tabla = new TablaTransiciones(file.getListadoRutas(), file.getNodosGrafo());
                     try {
-                        Thread.sleep(4000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException ex) {
                     }
                     path = tabla.getPath();
@@ -98,11 +98,13 @@ public class Main extends Application {
                     VBox vb = new VBox(20);
                     HBox panel = new HBox(15);
                     VBox data = visorDeImagen.initView(path);
+                    data.setStyle("-fx-background-color: #9FA4B6;");
                     controlDecamino ctrl = new controlDecamino(file.getNodosGrafo());
                     contenido = new VBox(5);
                     ctrl.crearContent();
                     panel.getChildren().addAll(data, contenido);
                     vb.getChildren().addAll(mb, panel);
+                    vb.setStyle("-fx-background-color: #B7B7B7;");
                     View = new Scene(vb, 900, 620);
                     m1.setOnAction((t) -> {
                         viaje = new nuevoViaje();
@@ -130,7 +132,6 @@ public class Main extends Application {
         grid.add(open, 2, 1);
         initialScene = new Scene(grid, 700, 100);
         s.setScene(initialScene);
-        //s.setResizable(false);
         s.show();
 
     }
