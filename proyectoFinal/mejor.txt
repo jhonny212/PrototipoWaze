@@ -1,7 +1,7 @@
 digraph G {
-node0[fillcolor=yellow, style="rounded,filled", shape=circle, label=A] 
-node1[fillcolor=yellow, style="rounded,filled", shape=circle, label=B]
- node0-> node1 [label="2.0"]
-node1-> node3 [label="1.0"]
-node3[fillcolor=yellow, style="rounded,filled", shape=circle, label=D]
+node1[fillcolor=yellow, style="rounded,filled", shape=circle, label=B] 
+node2[fillcolor=yellow, style="rounded,filled", shape=circle, label=C]
+ node1-> node2 [label="3.0"]
+node2-> node4 [label="2.0"]
+node4[fillcolor=yellow, style="rounded,filled", shape=circle, label=E]
  }

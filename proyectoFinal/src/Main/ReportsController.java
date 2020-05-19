@@ -62,6 +62,7 @@ public class ReportsController implements Initializable {
 
     @FXML
     private void vehiculo(ActionEvent event) {
+        total=0.0;
         mejor(1);
         int pos = obtener(origen.getName());
         peor(pos, new ArrayList<>(), new ArrayList<>(), 1, 0.0, false);
@@ -74,6 +75,7 @@ public class ReportsController implements Initializable {
 
     @FXML
     private void desgaste(ActionEvent event) {
+        total=0.0;
         mejor(2);
         int pos = obtener(origen.getName());
         peor(pos, new ArrayList<>(), new ArrayList<>(), 2, 0.0, false);
@@ -86,6 +88,7 @@ public class ReportsController implements Initializable {
 
     @FXML
     private void gas(ActionEvent event) {
+        total=0.0;
         mejor(4);
         int pos = obtener(origen.getName());
         peor(pos, new ArrayList<>(), new ArrayList<>(), 4, 0.0, false);
@@ -98,6 +101,7 @@ public class ReportsController implements Initializable {
 
     @FXML
     private void aPie(ActionEvent event) {
+        total=0.0;
         mejor(3);
         int pos = obtener(origen.getName());
         peor(pos, new ArrayList<>(), new ArrayList<>(), 3, 0.0, false);
@@ -179,7 +183,7 @@ public class ReportsController implements Initializable {
         TablaTransiciones tb = new TablaTransiciones();
         tb.generarGrafica(recorrido, "mejor", "mejor");
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException ex) {
         }
         File f = new File("mejor.png");
@@ -306,7 +310,7 @@ public class ReportsController implements Initializable {
         TablaTransiciones tb = new TablaTransiciones();
         tb.generarGrafica(graph, "peor", "peor");
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (InterruptedException ex) {
         }
         File f = new File("peor.png");

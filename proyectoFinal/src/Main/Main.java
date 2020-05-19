@@ -78,7 +78,6 @@ public class Main extends Application {
             path = URL.getText();
             visorDeImagen = new ControladorVistaInicio();
             try {
-                path = "/home/jhonny/Escritorio/DocumentoDeEntrada.txt";
                 file = new AnalizarArchivo(path);
                 if (file.crearArregrlo()) {
                     tabla = new TablaTransiciones(file.getListadoRutas(), file.getNodosGrafo());

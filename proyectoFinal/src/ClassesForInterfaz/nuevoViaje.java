@@ -60,6 +60,7 @@ public class nuevoViaje {
   public  int x, y;
   public boolean isApie;
     public void init(ArrayList<NodoGrafo> nodos) {
+        destino="";
         isApie=false;
         isSelected = false;
         ObservableList<String> options
@@ -93,7 +94,9 @@ public class nuevoViaje {
         });
         Fin.setOnAction((t) -> {
             y = Fin.getSelectionModel().getSelectedIndex();
-            destino=Fin.getSelectionModel().getSelectedItem().toString();
+            try{
+                    destino=Fin.getSelectionModel().getSelectedItem().toString();
+            }catch(NullPointerException e){}
         });
         Dialog dialog = new Dialog();
         dialog.setTitle("Login Dialog");
