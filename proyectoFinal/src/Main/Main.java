@@ -122,7 +122,6 @@ public class Main extends Application {
                     s.setScene(View);
                 }
             } catch (Exception ex) {
-                System.out.println(ex.getMessage() + "expecion");
             }
 
         });
