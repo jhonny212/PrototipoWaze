@@ -139,7 +139,7 @@ public class nuevoViaje {
                }
             }
              isSelected = true;
-             if(comboBox.getSelectionModel().toString().equals("Pie")){
+             if(comboBox.getSelectionModel().getSelectedItem().toString().equals("Pie")){
              isApie=true;
              }
             }catch(NullPointerException e){

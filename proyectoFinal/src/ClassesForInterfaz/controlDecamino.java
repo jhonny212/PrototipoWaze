@@ -19,6 +19,7 @@ import static Main.Main.getContenido;
 import Main.ReportsController;
 import estructuraGrafo.NodoGrafo;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -68,11 +69,13 @@ public class controlDecamino {
         btn.setOnAction((t) -> {
             data = comboBox.getSelectionModel().getSelectedItem().toString();
             if (!data.isBlank()) {
-                this.anterior = comboBox.getSelectionModel().toString();
-                agregarItems(data);
+                this.anterior = comboBox.getSelectionModel().getSelectedItem().toString();
+                System.out.println("Anterior" + anterior);
                 rpt.peor(getPos(data), new ArrayList<>(), new ArrayList(), -1, 0, true);
                 String caminos = rpt.getCaminos();
+                agregarItems(data, rpt.getDatos());
                 rpt.setCaminos("");
+                rpt.setDatos();
                 this.rutas.setText("Posibles caminos:\n" + caminos);
             }
         });
@@ -85,6 +88,7 @@ public class controlDecamino {
 
     public void modificar(String origen, String destino, int posO, int posD, boolean is) {
         this.isApie = is;
+        this.anterior = "";
         this.bThre = new ArbolB();
         this.posD = posD;
         this.posO = posO;
@@ -92,20 +96,21 @@ public class controlDecamino {
         btn.setDisable(false);
         o.setText(origen);
         d.setText(destino);
-        agregarItems(origen);
 
         int clave = getPos(origen);
         int key = getPos(destino);
         rpt.inicializar(clave, key, 0, listado);
         rpt.peor(clave, new ArrayList<>(), new ArrayList(), -1, 0, true);
         String caminos = rpt.getCaminos();
+        agregarItems(origen, rpt.getDatos());
         rpt.setCaminos("");
+        rpt.setDatos();
         this.rutas.setText("Posibles caminos:\n" + caminos);
     }
     int pos = 0;
 
-    public void agregarItems(String dato) {
-        boolean is = false;
+    public void agregarItems(String dato, ArrayList<String> values) {
+        boolean is = true;
         int valor = 0;
         if (!dato.equals(d.getText())) {
             ObservableList<String> list = comboBox.getItems();
@@ -113,24 +118,25 @@ public class controlDecamino {
                 bThre.eliminar(posv);
             });
             comboBox.getItems().clear();
-
-            for (int i = 0; i < listado.size(); i++) {
-                if (listado.get(i).getName().equals(dato)) {
-                    for (int j = 0; j < listado.get(i).getHref().size(); j++) {
-                        String value = listado.get(i).getHref().get(j).getName();
-                        if (value.equals(anterior) && isApie) {
-                            valor = getPos(anterior);
-                            is = true;
-                        }
-                        this.comboBox.getItems().add(value);
-                        int clave = getPos(value);
-                        bThre.insertarDato(new ruta(clave, value));
-                    }
-                }
+            if(!anterior.isEmpty()){
+            valor = getPos(anterior);
             }
+            for (int i = 0; i < values.size(); i++) {
+                String value = values.get(i);
+                if (value.equals(anterior) && isApie) {
+                    is = false;
+                } 
+                this.comboBox.getItems().add(value);
+                int clave = getPos(value);
+                bThre.insertarDato(new ruta(clave, value));
+            }
+
             if (isApie) {
-                if (!is) {
-                    bThre.insertarDato(new ruta(valor, anterior));
+                if (is) {
+                    if (!anterior.isEmpty()) {
+                        this.comboBox.getItems().add(anterior);
+                        bThre.insertarDato(new ruta(valor, anterior));
+                    }
                 }
             }
             bThre.imprimir();

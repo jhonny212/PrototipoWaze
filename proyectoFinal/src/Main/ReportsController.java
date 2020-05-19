@@ -62,7 +62,7 @@ public class ReportsController implements Initializable {
 
     @FXML
     private void vehiculo(ActionEvent event) {
-        total=0.0;
+        total = 0.0;
         mejor(1);
         int pos = obtener(origen.getName());
         peor(pos, new ArrayList<>(), new ArrayList<>(), 1, 0.0, false);
@@ -75,7 +75,7 @@ public class ReportsController implements Initializable {
 
     @FXML
     private void desgaste(ActionEvent event) {
-        total=0.0;
+        total = 0.0;
         mejor(2);
         int pos = obtener(origen.getName());
         peor(pos, new ArrayList<>(), new ArrayList<>(), 2, 0.0, false);
@@ -88,7 +88,7 @@ public class ReportsController implements Initializable {
 
     @FXML
     private void gas(ActionEvent event) {
-        total=0.0;
+        total = 0.0;
         mejor(4);
         int pos = obtener(origen.getName());
         peor(pos, new ArrayList<>(), new ArrayList<>(), 4, 0.0, false);
@@ -101,7 +101,7 @@ public class ReportsController implements Initializable {
 
     @FXML
     private void aPie(ActionEvent event) {
-        total=0.0;
+        total = 0.0;
         mejor(3);
         int pos = obtener(origen.getName());
         peor(pos, new ArrayList<>(), new ArrayList<>(), 3, 0.0, false);
@@ -113,9 +113,11 @@ public class ReportsController implements Initializable {
     }
     private double total;
     private ArrayList<ruta> worst;
-    public void init(){
-    worst=new ArrayList<>();
+
+    public void init() {
+        worst = new ArrayList<>();
     }
+
     public void inicializar(int x, int y, int longitud, ArrayList<NodoGrafo> list) {
         this.x = x;
         this.y = y;
@@ -125,6 +127,7 @@ public class ReportsController implements Initializable {
         worst = new ArrayList<>();
         total = 0.0;
         caminos = "";
+        datos = new ArrayList<>();
 
     }
 
@@ -260,8 +263,13 @@ public class ReportsController implements Initializable {
                                 caminos += " Mover a ";
                             }
                             caminos += pila.get(j);
+
+                        }
+                        if (!existe(pila.get(1), datos)) {
+                            datos.add(pila.get(1));
                         }
                         caminos += "\n";
+
                     }
                 } else {
                     peor(cod, pila, rts, tipo, valor, valid);
@@ -322,7 +330,7 @@ public class ReportsController implements Initializable {
         } catch (FileNotFoundException e) {
         }
         this.img2.setImage(source);
-        
+
     }
 
     public String getCaminos() {
@@ -331,6 +339,16 @@ public class ReportsController implements Initializable {
 
     public void setCaminos(String caminos) {
         this.caminos = caminos;
+    }
+    private ArrayList<String> datos;
+
+    public ArrayList<String> getDatos() {
+
+        return datos;
+    }
+
+    public void setDatos() {
+        this.datos = new ArrayList<>();
     }
 
 }
