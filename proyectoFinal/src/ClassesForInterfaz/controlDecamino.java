@@ -69,9 +69,10 @@ public class controlDecamino {
         btn.setOnAction((t) -> {
             data = comboBox.getSelectionModel().getSelectedItem().toString();
             if (!data.isBlank()) {
-                this.anterior = comboBox.getSelectionModel().getSelectedItem().toString();
-                System.out.println("Anterior" + anterior);
                 rpt.peor(getPos(data), new ArrayList<>(), new ArrayList(), -1, 0, true);
+                
+                String tmp = comboBox.getSelectionModel().getSelectedItem().toString();
+                anterior=tmp;
                 String caminos = rpt.getCaminos();
                 agregarItems(data, rpt.getDatos());
                 rpt.setCaminos("");
@@ -85,10 +86,11 @@ public class controlDecamino {
         this.rutas.setEditable(false);
 
     }
-
+    String auxAnt;
     public void modificar(String origen, String destino, int posO, int posD, boolean is) {
         this.isApie = is;
         this.anterior = "";
+        this.auxAnt=origen;
         this.bThre = new ArbolB();
         this.posD = posD;
         this.posO = posO;
@@ -114,9 +116,20 @@ public class controlDecamino {
         int valor = 0;
         if (!dato.equals(d.getText())) {
             ObservableList<String> list = comboBox.getItems();
-            list.stream().map((list1) -> getPos(list1)).forEachOrdered((posv) -> {
+            /*list.stream().map((list1) -> getPos(list1)).forEachOrdered((posv) -> {
                 bThre.eliminar(posv);
-            });
+            });*/
+            String fd="";
+            try{
+            fd=comboBox.getSelectionModel().getSelectedItem().toString();
+            }catch(NullPointerException e){}
+            for (int i = 0; i < list.size(); i++) {
+                if(!fd.equals(list.get(i))){
+                    int posv=getPos(fd);
+                    bThre.eliminar(posv);
+                }
+            }
+            
             comboBox.getItems().clear();
             if(!anterior.isEmpty()){
             valor = getPos(anterior);

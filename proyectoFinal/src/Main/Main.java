@@ -81,7 +81,7 @@ public class Main extends Application {
                 file = new AnalizarArchivo(path);
                 if (file.crearArregrlo()) {
                     tabla = new TablaTransiciones(file.getListadoRutas(), file.getNodosGrafo());
-                    
+                    Thread.sleep(3000);
                     path = tabla.getPath();
                     Menu m = new Menu("Opciones");
                     MenuItem m1 = new MenuItem("Nuevo viaje");
