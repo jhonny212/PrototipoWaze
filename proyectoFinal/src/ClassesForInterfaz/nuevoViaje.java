@@ -55,11 +55,12 @@ public class nuevoViaje {
     }
 
     public nuevoViaje() {
-
+        isApie=false;
     }
   public  int x, y;
-
+  public boolean isApie;
     public void init(ArrayList<NodoGrafo> nodos) {
+        isApie=false;
         isSelected = false;
         ObservableList<String> options
                 = FXCollections.observableArrayList(
@@ -136,6 +137,9 @@ public class nuevoViaje {
                }
             }
              isSelected = true;
+             if(comboBox.getSelectionModel().toString().equals("Pie")){
+             isApie=true;
+             }
             }catch(NullPointerException e){
             isSelected=false;
             }

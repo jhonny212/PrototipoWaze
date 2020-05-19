@@ -19,6 +19,7 @@ import static Main.Main.getContenido;
 import Main.ReportsController;
 import estructuraGrafo.NodoGrafo;
 import java.util.ArrayList;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
@@ -31,13 +32,14 @@ public class controlDecamino {
     TextArea rutas;
     int posO, posD;
     ArrayList<NodoGrafo> listado;
+    private String anterior;
 
     public controlDecamino(ArrayList<NodoGrafo> nodosGrafo) {
         this.listado = nodosGrafo;
     }
     String data;
     Button btn;
-
+    boolean isApie;
     ReportsController rpt;
 
     public void crearContent() {
@@ -50,7 +52,7 @@ public class controlDecamino {
         o = new Label();
         d = new Label();
         rutas = new TextArea("....");
-        
+
         comboBox = new ComboBox();
         panel.add(new Label("Partida de inicio:"), 0, 0);
         panel.add(new Label("Partida de inicio:"), 1, 0);
@@ -65,6 +67,7 @@ public class controlDecamino {
         btn.setOnAction((t) -> {
             data = comboBox.getSelectionModel().getSelectedItem().toString();
             if (!data.isBlank()) {
+                this.anterior = comboBox.getSelectionModel().toString();
                 agregarItems(data);
                 rpt.peor(getPos(data), new ArrayList<>(), new ArrayList(), -1, 0, true);
                 String caminos = rpt.getCaminos();
@@ -72,7 +75,7 @@ public class controlDecamino {
                 this.rutas.setText("Posibles caminos:\n" + caminos);
             }
         });
-        
+
         getContenido().getChildren().add(panel);
         comboBox.setDisable(true);
         btn.setDisable(true);
@@ -80,7 +83,8 @@ public class controlDecamino {
 
     }
 
-    public void modificar(String origen, String destino, int posO, int posD) {
+    public void modificar(String origen, String destino, int posO, int posD, boolean is) {
+        this.isApie = is;
         this.bThre = new ArbolB();
         this.posD = posD;
         this.posO = posO;
@@ -101,21 +105,36 @@ public class controlDecamino {
     int pos = 0;
 
     public void agregarItems(String dato) {
+        boolean is = false;
+        int valor = 0;
         if (!dato.equals(d.getText())) {
+            ObservableList<String> list = comboBox.getItems();
+            list.stream().map((list1) -> getPos(list1)).forEachOrdered((posv) -> {
+                bThre.eliminar(posv);
+            });
             comboBox.getItems().clear();
+            
             for (int i = 0; i < listado.size(); i++) {
                 if (listado.get(i).getName().equals(dato)) {
                     for (int j = 0; j < listado.get(i).getHref().size(); j++) {
                         String value = listado.get(i).getHref().get(j).getName();
+                        if (value.equals(anterior) && isApie) {
+                            valor = getPos(anterior);
+                            is = true;
+                        }
                         this.comboBox.getItems().add(value);
                         int clave = getPos(value);
                         bThre.insertarDato(new ruta(clave, value));
                     }
                 }
             }
+            if (isApie) {
+                if (!is) {
+                    bThre.insertarDato(new ruta(valor, anterior));
+                }
+            }
             bThre.imprimir();
         } else {
-            System.out.println("Has llegado!!");
             comboBox.setDisable(true);
             btn.setDisable(true);
         }

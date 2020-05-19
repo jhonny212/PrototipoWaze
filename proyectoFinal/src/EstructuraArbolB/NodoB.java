@@ -23,27 +23,35 @@ public class NodoB {
     public void buscarNodo(NodoB aux, ruta rta) {
         double clave1 = rta.getClave();
         if (aux.size == 0) {
+            //Si esta vacio
             aux.agregarDato(rta);
             return;
         }
         for (int i = 0; i < aux.size; i++) {
+            //Leer arrglo de nodos
             Nodo tmp = aux.datos[i];
             double clave2 = tmp.getDato().getClave();
+            //Si la clave ya existe
             if (clave1 == clave2) {
                 return;
             }
+            //Comparacion
             if (clave1 < clave2) {
                 if (aux.datos[i].hijoIzq != null) {
+                    //Mientras no este vacio seguir buscando
                     aux.datos[i].hijoIzq.buscarNodo(aux.datos[i].hijoIzq, rta);
                     break;
                 } else {
+                    //Agregar
                     aux.agregarDato(rta);
                     break;
 
                 }
             }
+            //Si esta en el ultimo arreglo
             if (aux.size == i + 1) {
                 if (aux.datos[i].hijoDer != null) {
+                    //buscar en la derecha
                     aux.datos[i].hijoDer.buscarNodo(aux.datos[i].hijoDer, rta);
                     break;
                 } else {
@@ -58,18 +66,16 @@ public class NodoB {
     private void agregarDato(ruta rta) {
         if (size < 4) {
             add(rta);
-
         } else {
             add(rta);
-
             dividir(this);
-
         }
     }
 
     private void add(ruta rta) {
         this.size++;
         this.datos[size - 1] = new Nodo(rta, size);
+        //Orfenar datos
         ordenarDatos(true, this);
     }
 
@@ -81,6 +87,7 @@ public class NodoB {
                     Nodo t2 = href.datos[j];
                     if (tmp.getDato().getClave() > t2.getDato().getClave()) {
                         if (v) {
+                            //Mover hijos
                             NodoB aux = href.datos[i].hijoDer;
                             NodoB aux2 = href.datos[i].hijoIzq;
                             href.datos[i].hijoDer = href.datos[j].hijoDer;
@@ -88,7 +95,7 @@ public class NodoB {
                             href.datos[j].hijoDer = aux;
                             href.datos[j].hijoIzq = aux2;
                         }
-                        {
+                        {//mover dato
                             ruta t = tmp.getDato();
                             href.datos[i].setDato(t2.getDato());
                             href.datos[j].setDato(t);
@@ -104,15 +111,21 @@ public class NodoB {
     private void dividir(NodoB nd) {
         if (nd.padre == null) {
             ArbolB.contador++;
+            //Si esta en la raiz
             nd.padre = new NodoB(ArbolB.contador);
         }
+        //tomar nodo de m/2 
         ruta ins = nd.datos[2].getDato();
+        //Agregarlo a su padre
         nd.padre.add(ins);
         ArbolB.contador++;
+        //Crear nuedo arreglo de nodo
         NodoB nuevo = new NodoB(ArbolB.contador);
+        //Llenando nuevo arreglo
         nuevo.add(nd.datos[3]);
         nuevo.add(nd.datos[4]);
         int pos = nd.getPos(ins, nd.padre);
+        //Asignar nodo
         nd.padre.datos[pos].hijoDer = nuevo;
         nd.datos[2] = null;
         nd.datos[3] = null;
@@ -126,16 +139,10 @@ public class NodoB {
             nd.padre.datos[pos].hijoDer = null;
         } catch (Exception e) {
         }
-        NodoB puntero = nd;
-        while (puntero != null) {
-            if (puntero.padre == null) {
-                break;
-            } else {
-                puntero = puntero.padre;
-            }
-        }
-        arreglarPuntero(puntero);
+        
+        arreglarPuntero(nd.padre);
         if (nd.padre.size == 5) {
+            //Si padre esta lleno dividir
             NodoB punt = nd.padre.datos[2].hijoIzq;
             ruta valor = nd.padre.datos[2].getDato();
             nd.padre.dividir(nd.padre);
@@ -261,21 +268,44 @@ public class NodoB {
                         //prestar dato
                         prestar(padre, posPadre, finalDir, posPadre, punt);
 
-                    } else {
+                    }
+                } else {
+                    //Caso dos si el nodo a eliminar no esta hasta abajo
+                    Nodo direc = punt.datos[pos + 1].hijoIzq.datos[0];
+                    ruta key = null;
+                    while (direc != null) {
+                        if (direc.hijoIzq != null) {
+                            direc = direc.hijoIzq.datos[0];
+                        } else {
+                            key = direc.getDato();
+                            break;
+                        }
 
                     }
+                    ArbolB.cnt = 0;
+                    ArbolB.valid = true;
+                    punt.datos[pos].setDato(key);
+                    try {
+                        ArbolB.eliminar(key.getClave());
+                        ArbolB.valid = false;
+                        ArbolB.cnt = 0;
+                    } catch (NullPointerException e) {
+                    }
+
                 }
             } catch (NullPointerException e) {
 
             }
 
         } else {
+
             if (punt.datos[pos].hijoIzq == null && punt.datos[pos].hijoDer == null) {
                 boolean value = fix(pos, punt);
                 if (value) {
+                    try{
                     prestar(padre, posPadre, finalDir, posPadre, punt);
-                } else {
-
+                    }catch(NullPointerException e){}
+                  
                 }
             } else {
                 Nodo direc = punt.datos[pos].hijoDer.datos[0];
@@ -510,7 +540,7 @@ public class NodoB {
             //obtenniendo su -> a la derecha
             NodoB der = null;
             if (opc == 1) {
-                der = hrefDer.datos[hrefDer.size-1].hijoDer;
+                der = hrefDer.datos[hrefDer.size - 1].hijoDer;
             } else {
                 der = dt.hijoDer;
             }

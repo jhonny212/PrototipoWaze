@@ -20,7 +20,9 @@ public class ArbolB {
 
     public void insertarDato(ruta rta) {
         contador++;
+        //Busqueda del nodo (raiz,param)
         raiz.buscarNodo(raiz, rta);
+        //Actualizar raiz
         if (raiz.padre != null) {
             raiz = raiz.padre;
         }
@@ -79,9 +81,9 @@ public class ArbolB {
                 Nodo tmp = aux.datos[i];
                 if (tmp != null) {
                     if (i == 0) {
-                        msj += " [label=\"<f" + tmp.key + "> " + tmp.getDato().getClave();
+                        msj += " [label=\"<f" + tmp.key + "> " + tmp.getDato().getName();
                     } else {
-                        msj += "| <f" + tmp.key + "> " + tmp.getDato().getClave();
+                        msj += "| <f" + tmp.key + "> " + tmp.getDato().getName();
                     }
                     if (tmp.hijoIzq != null) {
                         int cod = i + 1;
