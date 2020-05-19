@@ -5,7 +5,6 @@
  */
 package ClassesForInterfaz;
 
-import EstructuraArbolB.lugar;
 import estructuraGrafo.NodoGrafo;
 import java.util.ArrayList;
 import java.util.Arrays;

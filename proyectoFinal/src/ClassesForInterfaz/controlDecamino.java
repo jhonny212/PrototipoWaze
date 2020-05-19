@@ -76,7 +76,6 @@ public class controlDecamino {
                 this.rutas.setText("Posibles caminos:\n" + caminos);
             }
         });
-
         getContenido().getChildren().add(panel);
         comboBox.setDisable(true);
         btn.setDisable(true);

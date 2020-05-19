@@ -1,4 +1,4 @@
 digraph G {
 node [shape=record];
-struct1 [label="<f1> B| <f2> C| <f3> E"]; 
+struct1 [label="<f1> E| <f2> G"]; 
  }

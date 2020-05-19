@@ -113,7 +113,9 @@ public class ReportsController implements Initializable {
     }
     private double total;
     private ArrayList<ruta> worst;
-
+    public void init(){
+    worst=new ArrayList<>();
+    }
     public void inicializar(int x, int y, int longitud, ArrayList<NodoGrafo> list) {
         this.x = x;
         this.y = y;
